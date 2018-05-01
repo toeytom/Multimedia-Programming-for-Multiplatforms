@@ -2,6 +2,7 @@ var pipe = []
 function game(){
     kahang = new Sprite(scene,"1.jpg",50,50)
     kahang.setSpeed(0)
+    kahang.setPosition(100,300)
     for(var i = 0 ; i<8;i++)
     {
         pipe[i] = new Sprite(scene,"1.jpg",100,250)
