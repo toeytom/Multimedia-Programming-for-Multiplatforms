@@ -1,4 +1,22 @@
 function update(){
     scene.clear()
-    kahang.update()
+    bg.update()
+    
+    
+    if(scene.getMouseClicked()){
+        if(!statusgame){
+            statusgame= true
+        console.log("sd")
+        bg.setImage("3.png")
+        }
+        else{
+            console.log("sad")
+            
+        }
+    }
+    if(statusgame)
+    {
+        kahang.update()
+    }
+   
 }
