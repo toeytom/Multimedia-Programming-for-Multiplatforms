@@ -8,6 +8,7 @@ function update(){
             statusgame= true
         console.log("sd")
         bg.setImage("3.png")
+        game()
         }
         else{
             console.log("sad")
@@ -17,6 +18,11 @@ function update(){
     if(statusgame)
     {
         kahang.update()
+        for(var i = 0;i<10;i++)
+        {
+           
+            pipe[i].update()
+        }
     }
    
 }
