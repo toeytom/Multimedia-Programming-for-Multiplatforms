@@ -23,6 +23,10 @@ function update(){
            
             pipe[i].update()
         }
+        for(var i = 0;i<4;i++){
+            hearth[i].update()
+        }
     }
+    
    
 }
