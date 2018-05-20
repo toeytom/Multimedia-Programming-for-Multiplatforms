@@ -1,12 +1,10 @@
+
 /* simpleGame.js
    a very basic game library for the canvas tag
    loosely based on Python gameEngine
    and Scratch
-   expects an HTML5-compliant browser
-   includes support for mobile browsers
-
-   Main code and design: Andy Harris - 2011/2012
-   Animation and tile elements by Tyler Mitchell
+   Andy Harris - 2011/2012
+   Animation and canvas elements by Tyler Mitchell
 */
 
 
@@ -17,7 +15,14 @@ var virtKeys = false;
 
 function Sprite(scene, imageFile, width, height){ 
     //core class for game engine
-  this.scene = scene;
+    /*
+    TODO:
+      Add collision detection (DONE 2/4/11)
+      Add access modifiers for x,y,dx,dy (DONE 10/26/11)
+      Add multiple boundActions
+      Support multiple images / states (DONE 10/26/11)
+      Sprite element now expects scene rather than canvas
+    */
   this.canvas = scene.canvas;
   this.context = this.canvas.getContext("2d");
   this.image = new Image();
@@ -56,13 +61,7 @@ function Sprite(scene, imageFile, width, height){
   this.setX = function (nx){ this.x = nx; }
   this.setY = function (ny){ this.y = ny; }
   this.setChangeX = function (ndx){ this.dx = ndx; }
-  this.setChangeY = function (ndy){ this.dy = ndy; }
-  this.setDX = function(newDX){
-    this.dx = newDX;
-  }
-  this.setDY = function(newDY){
-    this.dy = newDY;
-  }
+  this.setChangeY = function (ndy){ this.dx = ndx; }
   this.changeXby = function(tdx){ this.x += tdx};
   this.changeYby = function(tdy){ this.y += tdy};
   this.hide = function(){this.visible = false; }
@@ -70,20 +69,15 @@ function Sprite(scene, imageFile, width, height){
 
   this.draw = function(){
     //draw self on canvas;
-    //intended only to be called from update, should never
-    //need to be deliberately called by user
+		//intended only to be called from update, should never
+		//need to be deliberately called
     ctx = this.context;
 
     ctx.save();
-	//The following lines are for Tyler's code. Removed for now
-	//if( this.camera ){ ctx.translate(this.x - this.camera.cameraOffsetX, this.y - this.camera.cameraOffsetY); }
-	//else{ ctx.translate(this.x, this.y); }
-      
-      //transform element
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.imgAngle);
-      
-      //draw image with center on origin
+	if( this.camera ){ ctx.translate(this.x - this.camera.cameraOffsetX, this.y - this.camera.cameraOffsetY); }
+	else{ ctx.translate(this.x, this.y); }
+    ctx.rotate(this.imgAngle);
+    //draw image with center on origin
 	if( this.animation != false ){
           this.animation.drawFrame(ctx);
 	}
@@ -298,15 +292,8 @@ function Sprite(scene, imageFile, width, height){
     this.moveAngle += diffRad;
     this.calcVector();
   } // end changeMoveAngleBy
-  
-  this.getMoveAngle = function(){
-    //moveAngle is stored in radians.
-    //return it in degrees
-    //don't forget we offset the angle by 90 degrees
-    return (this.moveAngle * 180 / Math.PI) + 90;    
-  }
 
-    //convenience functions combine move and img angles
+  //convenience functions combine move and img angles
   this.setAngle = function(degrees){
     this.setMoveAngle(degrees);
     this.setImgAngle(degrees);
@@ -346,17 +333,16 @@ function Sprite(scene, imageFile, width, height){
     //collisions only activated when both sprites are visible
     collision = false;
     if (this.visible){
-      
       if (sprite.visible){
 	//define borders
-	myLeft = this.x - (this.width / 2);
-	myRight = this.x + (this.width / 2);
-	myTop = this.y - (this.height / 2);
-	myBottom = this.y + (this.height / 2);
-	otherLeft = sprite.x - (sprite.width / 2);
-	otherRight = sprite.x + (sprite.width / 2);
-	otherTop = sprite.y - (sprite.height / 2);
-	otherBottom = sprite.y + (sprite.height / 2);
+	myLeft = this.x;
+	myRight = this.x + this.width;
+	myTop = this.y;
+	myBottom = this.y + this.height;
+	otherLeft = sprite.x;
+	otherRight = sprite.x + sprite.width;
+	otherTop = sprite.y;
+	otherBottom = sprite.y + sprite.height;
     
 	//assume collision
 	collision = true;
@@ -376,8 +362,13 @@ function Sprite(scene, imageFile, width, height){
   } // end collidesWith
   
   this.distanceTo = function(sprite){
-      diffX = this.x - sprite.x;
-      diffY = this.y - sprite.y;
+      //get centers of sprites
+      myX = this.x + (this.width/2);
+      myY = this.y + (this.height/2);
+      otherX = sprite.x + (sprite.width/2);
+      otherY = sprite.y + (sprite.height/2);
+      diffX = myX - otherX;
+      diffY = myY - otherY;
       dist = Math.sqrt((diffX * diffX) + (diffY * diffY));
       return dist;
   } // end distanceTo
@@ -399,53 +390,6 @@ function Sprite(scene, imageFile, width, height){
       return degrees;
   } // end angleTo
   
-  this.isMouseDown = function(){
-    //determines if mouse is clicked on this element
-    mx = this.scene.getMouseX();
-    my = this.scene.getMouseY();
-    sLeft = this.x - (this.width / 2);
-    sRight = this.x + (this.width / 2);
-    sTop = this.y - (this.height / 2);
-    sBottom = this.y + (this.height / 2);
-    hit = false;
-    
-    if (mx > sLeft){
-      if (mx < sRight){
-	if (my > sTop){
-	  if (my < sBottom){
-	    if (this.scene.touchable){
-	      //if it's a touchable interface,
-	      //this is a hit
-	      hit = true;  
-	    } else {
-	      //for a normal mouse, check for clicked, too
-	      if (this.scene.getMouseClicked()){
-		hit = true;
-	      }
-	    }
-	  }
-	}
-      }
-    }
-    return hit;
-  } // end isMouseDown
-  
-  this.isClicked = function(){
-    //eventually return true only when mouse is released;
-    //for now, simply another name for isMouseDown
-    return this.isMouseDown();
-    
-    /*
-    hit = false;
-    if (this.isMouseDown()){
-      if (this.released){
-	hit = true;
-      } // end if
-    } // end if
-    return hit;
-    */
-  } // end isClicked
-  
   this.setCameraRelative = function( cam ){ this.camera = cam; }
 
   this.report = function(){
@@ -459,13 +403,25 @@ function Sprite(scene, imageFile, width, height){
 
 function Scene(){
     //Scene that encapsulates the animation background
+    /*
+    TODO: 
+      AddSprite method
+      Put sprites in linked list
+      Automatically update each sprite in list
+      Add keyboard input (initial version done)
+      array of keydowns like PyGame? (DONE: 2/25/11)
+      keyboard constants (DONE: 2/25/11)
+      Consider drawing canvas directly on page - position absolute
+      (DONE - Scene now creates own canvas)
+      mouse input
+      virtual buttons for portable devices
+    */
 
     //determine if it's a touchscreen device
-    this.touchable = 'createTouch' in document;
+    touchable = 'createTouch' in document;
     
     //dynamically create a canvas element
     this.canvas = document.createElement("canvas");
-    this.canvas.style.backgroundColor = "yellow";
     document.body.appendChild(this.canvas);
     this.context = this.canvas.getContext("2d");
     
@@ -475,24 +431,13 @@ function Scene(){
 
     this.start = function(){
       //set up keyboard reader if not a touch screen.
-      // removed this test as it was breaking on machines with both
-      // touch and keyboard input
-      //if (!this.touchable){
+      if (!touchable){
 	this.initKeys();
 	document.onkeydown = this.updateKeys;
 	document.onkeyup = this.clearKeys;
-      //} // end if
+      } // end if
       this.intID = setInterval(localUpdate, 50);
       document.onmousemove = this.updateMousePos;
-      document.mouseClicked = false;
-      document.onmousedown = function(){
-	this.mouseDown = true;
-	this.mouseClicked = true;
-      }
-      document.onmouseup = function(){
-	this.mouseDown = false;
-	this.mouseClicked  = false;
-      }
     } 
 
     this.stop = function(){
@@ -502,7 +447,6 @@ function Scene(){
     this.updateKeys = function(e){      
       //set current key
       currentKey = e.keyCode;
-      //console.log(e.keyCode);
       keysDown[e.keyCode] = true;
     } // end updateKeys
     
@@ -519,9 +463,26 @@ function Scene(){
     } // end initKeys
     
     this.setSizePos = function(height, width, top, left){
-      //convenience function.  Cals setSize and setPos
-      this.setSize(height, width);
-      this.setPos(top, left);
+      //modify the canvas' style to conform to the new parameters
+      //styleString = "background-color: yellow; \n";
+      styleString = "";
+      styleString += "position: absolute; \n";
+      styleString += "height: " + height + "px;\n";
+      styleString += "width: " + width + "px;\n";
+      styleString += "top: " + top + "px;\n";
+      styleString += "left: " + left + "px;\n";
+      //this.canvas.setAttribute("style", styleString);
+      
+      this.height = height;
+      this.width = width;
+      this.top = top;
+      this.left = left;
+
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+      this.canvas.style.left = this.left;
+      this.canvas.style.top = this.top;
+
     } // end setSizePos
 
     this.setSize = function(width, height){
@@ -537,13 +498,8 @@ function Scene(){
       //offset from the page
       this.left = left;
       this.top = top;
-
-      //CSS3 transform to move elements.
-      //Cross-browser compatibility would be awesome, guys...
-      this.canvas.style.MozTransform = "translate(" + left + "px, " + top + "px)";
-      this.canvas.style.WebkitTransform = "translate(" + left + "px, " + top + "px)";
-      this.canvas.style.OTransform = "translate(" + left + "px, " + top + "px)";
-
+      this.canvas.style.left = left;
+      this.canvas.style.top = top;
     } // end setPos
     
     this.setBG = function(color){
@@ -551,8 +507,10 @@ function Scene(){
     } // end this.setBG
     
     this.updateMousePos = function(e){
+      //don't forget offsets....
       this.mouseX = e.pageX;
       this.mouseY = e.pageY;
+      //console.log("X:" + this.mouseX + ", Y: " + this.mouseY);
     } // end function
     
     this.hideCursor = function(){
@@ -561,20 +519,6 @@ function Scene(){
     
     this.showCursor = function(){
       this.canvas.style.cursor = "default";
-    }
-    
-    this.getMouseX = function(){
-      //incorporate offset for canvas position
-      return document.mouseX - this.left;
-    }
-    
-    this.getMouseY = function(){
-      //incorporate offset for canvas position
-      return document.mouseY - this.top;
-    }
-    
-    this.getMouseClicked = function(){
-      return document.mouseClicked;
     }
     
     this.hide = function(){
@@ -586,36 +530,22 @@ function Scene(){
     }
     
     this.setSize(800, 600);
-    this.setPos(10, 10);
+    this.setPos(10, 100);
     this.setBG("lightgray");
     
+
 } // end Scene class def
 
 function Sound(src){
   //sound effect class
   //builds a sound effect based on a url
-  //may need both ogg and mp3.
+  //ogg is preferred.
   this.snd = document.createElement("audio");
   this.snd.src = src;
-  //preload sounds if possible (won't work on IOS)
-  this.snd.setAttribute("preload", "auto");
-  //hide controls for now
-  this.snd.setAttribute("controls", "none");
-  this.snd.style.display = "none";
-  //attach to document so controls will show when needed
-  document.body.appendChild(this.snd);
-
+  
   this.play = function(){
     this.snd.play();
   } // end play function
-  
-  this.showControls = function(){
-    //generally not needed.
-    //crude hack for IOS
-    this.snd.setAttribute("controls", "controls");
-    this.snd.style.display = "block";
-  } // end showControls
-  
 } // end sound class def
 
 function Joy(){
@@ -693,8 +623,8 @@ function Joy(){
   this.onTouchEnd = function(event){
     result = "no touch";
     touches = event.touches;
-    this.diffX = 0;
-    this.diffY = 0;
+    diffX = 0;
+    diffY = 0;
     
     //turn off all virtual keys
     if (virtKeys){
@@ -702,28 +632,9 @@ function Joy(){
       keysDown[K_RIGHT] = false;
       keysDown[K_UP] = false;
       keysDown[K_DOWN] = false;
-    } 
+    }    
   } // end onTouchEnd
-  
-  // add utility methods to retrieve various attributes
-  this.getDiffX = function(){
-    //compensate for possible null
-    if (document.diffX == null){
-      document.diffX = 0;
-    } // end if
-    return document.diffX;
-  }
-  this.getDiffY = function(){
-    //compensate for possible null
-    if (document.diffY == null){
-      document.diffY = 0;
-    } // end if
-    return document.diffY;
-  }
-  
-  this.getMouseX = function(){return document.mouseX;}
-  this.getMouseY = function(){return document.mouseY;}    
-  
+    
   //add event handlers if appropriate
   touchable = 'createTouch' in document;
   if (touchable){
@@ -731,7 +642,6 @@ function Joy(){
     document.addEventListener('touchmove', this.onTouchMove, false);
     document.addEventListener('touchend', this.onTouchEnd, false);
   } // end if
-  
 } // end joy class def
 
 function Accel(){
@@ -762,34 +672,6 @@ function Accel(){
       } // end if
     } // end event handler 
   } // end if
-  
-  //return values with utility methods
-  
-  this.getAX = function(){
-    if (window.ax == null){
-      window.ax = 0;
-    }  
-    return window.ax;
-  } // end getAx
-  
-  this.getAY = function(){
-    if (window.ay == null){
-      window.ay = 0;
-    }  
-    return window.ay;
-  } // end getAx
-  
-  this.getAZ = function(){
-    if (window.az == null){
-      window.az = 0;
-    }  
-    return window.az;
-  } // end getAx
-  
-  this.getRotX = function(){return rotX;}
-  this.getRotY = function(){return rotY;}
-  this.getRotZ = function(){return rotZ;}
-  
 } // end class def
 
 function Timer(){
@@ -851,61 +733,7 @@ function localUpdate(){
 
 /* tile and event stuff added by Tyler */
 
-function GameButton(label){
-    /*
-	This object creates a button that can be sized
-	and positioned wherever you wish. The label will
-	be displayed, but can be complete HTML (including
-	an image tag if you wish.)  Use isClicked() to
-	get the current status of the button (true or false.)
-	Responds to touch events on mobile devices.
-    */
-    
-    this.clicked = false;
-    this.button = document.createElement("button");
-    this.button.setAttribute("type", "button");
-    this.button.innerHTML = label;
-    this.button.style.position = "absolute";
-    this.button.style.left = "0px";
-    this.button.style.top = "0px";
-    
-    this.button.onmousedown = function(){
-	this.clicked = true;
-    } // end mousedown
-    
-    this.button.ontouchstart = function(){
-	this.clicked = true;
-    } // end touchstart
-    
-    this.button.onmouseup = function(){
-	this.clicked = false;
-    } // end onmouseup
-    
-    this.isClicked = function(){
-	return this.button.clicked;
-    } // end isClicked
-    
-    this.setPos = function(left, top){
-	this.button.style.left = left + "px";
-	this.button.style.top = top + "px";
-    } // end setPos
-    
-    this.setPosition = function(left, top){
-	//utility alias for setPos
-	this.setPos(left, top);
-    }
-    
-    this.setSize = function(width, height){
-	this.button.style.width = width + "px";
-	this.button.style.height = height + "px";
-    } // end setSize
-    
-    document.body.appendChild(this.button);            
-} // end gameButton class def
-
-function Animation(spriteSheet, imgWidth, imgHeight, cellWidth, cellHeight){
-  //Animation class by Tyler Mitchell
-  //for simplicity, all cells must be the same width and height combination
+function Animation(spriteSheet, imgWidth, imgHeight, cellWidth, cellHeight){//for simplicity, all cells must be the same width and height combination
   this.sheet = spriteSheet;
   this.imgWidth = imgWidth;
   this.imgHeight = imgHeight;
@@ -958,7 +786,7 @@ function Animation(spriteSheet, imgWidth, imgHeight, cellWidth, cellHeight){
 	//currentFrame = Math.floor( (this.totalCycleTime % this.animationLength) / this.frameDelta );
 	elTime = this.totalCycleTime % this.animationLength;
 	currentFrame = Math.floor(elTime / this.frameDelta);
-	//console.log(elTime);
+	console.log(elTime);
 	
 	//document.getElementById("FPS").innerHTML = this.animationLength;//for debugging
 	row = Math.floor( ( this.currentCycle[1] + currentFrame ) / this.framesPerRow );
@@ -1005,14 +833,6 @@ function Animation(spriteSheet, imgWidth, imgHeight, cellWidth, cellHeight){
   }
   
 }// end of Animation class
-
-/*
-The following classes are experimental, and are not yet
-tested for widespread use.
-They provide tile-based worlds and a camera
-All are by Tyler Mitchell
-
-
 
 function Camera(scene){
   this.canvas = scene.canvas;
@@ -1283,8 +1103,6 @@ function TileMap(scene){
   this.setPosition = function(){}
 }
 
-End of experimental classes
-*/
 
 //keyboard constants
 K_A = 65; K_B = 66; K_C = 67; K_D = 68; K_E = 69; K_F = 70; K_G = 71;
@@ -1292,10 +1110,6 @@ K_H = 72; K_I = 73; K_J = 74; K_K = 75; K_L = 76; K_M = 77; K_N = 78;
 K_O = 79; K_P = 80; K_Q = 81; K_R = 82; K_S = 83; K_T = 84; K_U = 85;
 K_V = 86; K_W = 87; K_X = 88; K_Y = 89; K_Z = 90;
 K_LEFT = 37; K_RIGHT = 39; K_UP = 38;K_DOWN = 40; K_SPACE = 32;
-K_ESC = 27; K_PGUP = 33; K_PGDOWN = 34; K_HOME = 36; K_END = 35;
-K_0 = 48; K_1 = 49; K_2 = 50; K_3 = 51; K_4 = 52; K_5 = 53;
-K_6 = 54; K_7 = 55; K_8 = 56; K_9 = 57; 
-
 
 //Animation Constants
 SINGLE_ROW = 1; SINGLE_COLUMN = 2; VARIABLE_LENGTH = 3;
