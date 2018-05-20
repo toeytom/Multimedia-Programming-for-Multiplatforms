@@ -2,7 +2,7 @@
 <html lang ="en-US">
 <head>
 	<meta charset="utf-8">
-	<title>HOVER CAR</title>
+	<title>กระหังหรรษา</title>
 	<script type="text/javascript" src="simpleGame.js"></script>
 	<script type="text/javascript"> 
 	var scene;
@@ -43,7 +43,7 @@
 			
 			if(keysDown[K_SPACE]){
 				kahang.playAnimation();
-				this.addVector(0,1.5);
+				this.addVector(0,1);
 				kahang.setCurrentCycle("up");
 			}
 		}
@@ -74,11 +74,11 @@
 
 	function checkCollisions(heartNum){
 
-		// 	if(kahang.collidesWith(heart[heartNum])){
-		// 		heart[heartNum].hide();
-		// 		score++;
-		// 		// console.log(score);
-		// 	}
+			if(newcollision(kahang,heart[heartNum])){
+				heart[heartNum].hide();
+				score++;
+				console.log("score"+score);
+			}
 		}
 	function checkCollisionsTower(towerNum){
 		// 
@@ -92,6 +92,15 @@
 			heart[heartNum].show();
 
 		}
+	}
+	function newcollision(a , b ){
+	  if(a.x+50>=b.x-25&&(a.y+50>=b.y+25&&a.y-50<=b.y-25)  ){
+		  return true;
+	  }
+	  else{
+		  return false;
+	  }
+
 	}
 	function moveBamboo(){	
 		
@@ -167,6 +176,7 @@
 		}
 		moveBamboo();
 		kahang.update();
+		console.log("w"+kahang.cWidth)
 
 	}
 	</script>

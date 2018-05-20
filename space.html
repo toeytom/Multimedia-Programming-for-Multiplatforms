@@ -2,7 +2,7 @@
 <html lang ="en-US">
 <head>
 	<meta charset="utf-8">
-	<title>HOVER CAR</title>
+	<title>Kahang</title>
 	<script type="text/javascript" src="simpleGame.js"></script>
 	<script type="text/javascript"> 
 	var scene;
@@ -20,7 +20,7 @@
 
 
 	function Car(){
-		var tCar = new Sprite(scene,"hoverCar.png",20,20);
+		var tCar = new Sprite(scene,"hoverCar.png",50,50);
 		tCar.setSpeed(0);
 		
 		// tCar.hSpeed = 0;
@@ -64,6 +64,7 @@
 		}
 	function checkCollisionsTower(towerNum){
 		if(tower[towerNum].collidesWith(car)){
+			console.log("test")
 			for(var i=0; i<8; i++){
 				tower[i].setSpeed(0);
 			}
