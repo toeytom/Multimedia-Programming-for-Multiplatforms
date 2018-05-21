@@ -93,24 +93,19 @@
 
 	function moveBamboo(){	
 		
-		// if(position <= tower[0].y+25){
-		// 	for(var i =0; i<8; i++){
-		// 		tower[i].addVector(0,0.5);
-		// 	}
+		if(position <= tower[0].y+25){
+			for(var i =0; i<8; i++){
+				tower[i].addVector(0,0.5);
+			}
 			
-		// }if(position >= tower[0].y+25) {
-		// 	for(var i =0; i<8; i++){
-		// 		tower[i].addVector(180,0.5);
-		// 	}
-		// }
+		}if(position >= tower[0].y+25) {
+			for(var i =0; i<8; i++){
+				tower[i].addVector(180,0.5);
+			}
+		}
 
 	}
-	function Level(){
-		if(score == 5){
-			moveBamboo();
-			
-		}
-	}
+	
 
 	function init(){
 		scene = new Scene();
@@ -170,7 +165,9 @@
 
 		}
 		// moveBamboo();
-		Level();
+		if(score >= 5){
+			moveBamboo();			
+		}
 		kahang.update();
 		// console.log("w"+kahang.cWidth)
 
