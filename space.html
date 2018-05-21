@@ -20,7 +20,7 @@
 
 
 	function Kahang(){
-		var tKahang = new Sprite(scene,"kahangCharacter1.png",800,200);
+		var tKahang = new Sprite(scene,"kahang2.png",800,200);
 			
 		tKahang.loadAnimation(800,200,100,100);
 		tKahang.setSpeed(0);
@@ -39,7 +39,7 @@
 		// kahang.setCurrentCycle("up");
 		
 		tKahang.checkKeys = function(){
-			this.changeImage("kahangCharacter1.png");
+			this.changeImage("kahang2.png");
 			
 			if(keysDown[K_SPACE]){
 				kahang.playAnimation();
