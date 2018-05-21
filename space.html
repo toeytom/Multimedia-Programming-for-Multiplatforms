@@ -2,12 +2,12 @@
 <html lang ="en-US">
 <head>
 	<meta charset="utf-8">
-	<title>Kahang</title>
+	<title>กระหังหรรษา</title>
 	<script type="text/javascript" src="simpleGame.js"></script>
 	<script type="text/javascript"> 
 	var scene;
-	var city; //bg
-	var car; // kahang
+	var background; //bg
+	var kahang; // kahang
 	var tower=[]; //bamboo
 	var heart=[];
 	var score = 0;
@@ -19,28 +19,50 @@
 	
 
 
-	function Car(){
-		var tCar = new Sprite(scene,"hoverCar.png",50,50);
-		tCar.setSpeed(0);
+	function Kahang(){
+		var tKahang = new Sprite(scene,"kahangCharacter1.png",800,200);
+			
+		tKahang.loadAnimation(800,200,100,100);
+		tKahang.setSpeed(0);
+		tKahang.generateAnimationCycles();
+		tKahang.renameCycles(new Array("up","down"));
+		tKahang.setAnimationSpeed(1000);
+		tKahang.pauseAnimation();
+		tKahang.setCurrentCycle("up");
+			
+		// kahang.loadAnimation(800,200,100,100);
+		// kahang.setSpeed(0);
+		// kahang.generateAnimationCycles();
+		// kahang.renameCycles(new Array("up","down"));
+		// kahang.setAnimationSpeed(1000);
+		// kahang.pauseAnimation();
+		// kahang.setCurrentCycle("up");
 		
-		// tCar.hSpeed = 0;
-		tCar.checkKeys = function(){
-			this.changeImage("hoverCar.png");
+		tKahang.checkKeys = function(){
+			this.changeImage("kahangCharacter1.png");
 			
 			if(keysDown[K_SPACE]){
-				this.addVector(0,1.5);
-				// this.changeImage("hoverCarThrust.png");
+				kahang.playAnimation();
+				this.addVector(0,1);
+				kahang.setCurrentCycle("up");
 			}
 		}
-		tCar.checkGravity = function(){
-			if(this.y >580){
-				this.setPosition(this.x,580);
+		tKahang.checkGravity = function(){
+			if(this.y >540){
+				this.setPosition(this.x,540);
 
-			}else{
+			}
+			else if(this.y < 70 ){
+				this.setPosition(this.x,70);
+				console.log("y " + this.y);
 				this.addVector(180,0.5);
 			}
+			else{
+				this.addVector(180,0.5);				
+			}
+
 		}
-		return tCar;
+		return tKahang;
 	}
 	function Tower(){
 		var tTower = new Sprite(scene,"top.png",30,350);
@@ -56,22 +78,15 @@
 	}
 
 	function checkCollisions(heartNum){
-			if(car.collidesWith(heart[heartNum])){
+
+			if(newcollision(kahang,heart[heartNum])){
 				heart[heartNum].hide();
 				score++;
-				// console.log(score);
+				// console.log("score"+score);
 			}
 		}
 	function checkCollisionsTower(towerNum){
-		if(tower[towerNum].collidesWith(car)){
-			console.log("test")
-			for(var i=0; i<8; i++){
-				tower[i].setSpeed(0);
-			}
-			for(var i=0; i<4; i++){
-				heart[i].setSpeed(0);
-			}
-		}
+		// 
 			
 		
 	}
@@ -82,6 +97,15 @@
 			heart[heartNum].show();
 
 		}
+	}
+	function newcollision(a , b ){
+	  if(a.x+50>=b.x-25&&(a.y+50>=b.y+25&&a.y-50<=b.y-25)  ){
+		  return true;
+	  }
+	  else{
+		  return false;
+	  }
+
 	}
 	function moveBamboo(){	
 		
@@ -101,11 +125,12 @@
 	function init(){
 		scene = new Scene();
 		// scene.setSize(800,600);
-		city = new Sprite(scene,"background3.jpg",800,600);
-		city.setSpeed(0);
-		city.setPosition(400,300);
-		car = new Car();
+		background = new Sprite(scene,"background3.jpg",800,600);
+		background.setSpeed(0);
+		background.setPosition(400,300);
+		kahang = new Kahang();
 
+		
 
 		for(var i=0; i<8;i++){
 			tower[i] = new Tower(); 
@@ -133,16 +158,17 @@
 			heart[i].setPosition(tower[i*2].x,tower[i*2].y+220);
 			
 		}
-		car.setPosition(125,heart[0].y+20);
-
+		
+		
+		kahang.setPosition(125,heart[0].y+20);
 		scene.start();
 	}
 
 	function update(){
 		scene.clear();
-		car.checkKeys();
-		city.update();
-		car.checkGravity();
+		kahang.checkKeys();
+		background.update();
+		kahang.checkGravity();
 		for(var i=0; i<8;i++){
 			checkCollisionsTower(i);
 			tower[i].update();
@@ -154,7 +180,8 @@
 
 		}
 		moveBamboo();
-		car.update();
+		kahang.update();
+		// console.log("w"+kahang.cWidth)
 
 	}
 	</script>
