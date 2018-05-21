@@ -15,6 +15,7 @@
 	var distY;
 	var position;
 	var position2;
+	// var speed=0.5;
 
 
 	
@@ -92,42 +93,26 @@
 		}
 	}
 
-	function moveBamboo(){	
+	function moveBamboo(speed){	
 		
-		// if(position <= tower[0].y+25){
-		// 	for(var i =0; i<8; i+2){
-		// 		if(i==0||i==1||i==4||i==5){
-		// 		tower[i].addVector(0,0.5);}
-		// 		else{
-		// 			tower[i].addVector(180,0.5);
-		// 		}
-		// 	}			
-		// }if(position >= tower[0].y+25) {
-		// 	for(var i =0; i<8; i+2){
-		// 		if(i==0||i==1||i==4||i==5){
-		// 		tower[i].addVector(180,0.5);}
-		// 		else{
-		// 			tower[i].addVector(0,0.5);
-		// 		}
-		// 	}
-		// }
-		// if(position <= tower[2].y+25){
-		// 	for(var i =1; i<8; i+2){
-		// 		if(i==0||i==1||i==4||i==5){
-		// 		tower[i].addVector(0,0.5);}
-		// 		else{
-		// 			tower[i].addVector(180,0.5);
-		// 		}
-		// 	}			
-		// }if(position >= tower[2].y+25) {
-		// 	for(var i =1; i<8; i+2){
-		// 		if(i==0||i==1||i==4||i==5){
-		// 		tower[i].addVector(180,0.5);}
-		// 		else{
-		// 			tower[i].addVector(0,0.5);
-		// 		}
-		// 	}
-		// }
+		if(position <= tower[0].y+20){
+			for(var i =0; i<8; i++){
+				if(i==0||i==1||i==4||i==5){
+				tower[i].addVector(0,speed);}
+				else{
+					tower[i].addVector(180,speed);
+				}
+			}			
+		}if(position >= tower[0].y+20) {
+			for(var i =0; i<8; i++){
+				if(i==0||i==1||i==4||i==5){
+				tower[i].addVector(180,speed);}
+				else{
+					tower[i].addVector(0,speed);
+				}
+			}
+		}
+		
 
 	}
 	
@@ -155,7 +140,7 @@
 				tower[i].setPosition(tower[i-2].x+200,Math.random()*50+50);
 			}else{
 				tower[i].changeImage("bottom.png");
-				tower[i].setPosition(tower[i-1].x,tower[i-1].y+480);
+				tower[i].setPosition(tower[i-1].x,tower[i-1].y+460);
 
 			}
 		
@@ -190,8 +175,11 @@
 
 		}
 		
-		if(score >= 1){
-			moveBamboo();			
+		if(score >= 2){
+			moveBamboo(0.5);			
+		}
+		if(score >= 4){
+			moveBamboo(1);
 		}
 		kahang.update();
 		// console.log("w"+kahang.cWidth)
