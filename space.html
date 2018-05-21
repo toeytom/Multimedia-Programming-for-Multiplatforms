@@ -79,10 +79,14 @@
 
 	function checkCollisions(heartNum){
 
-			if(newcollision(kahang,heart[heartNum])){
+			if(kahang.collidesWithnew(heart[heartNum])){
 				heart[heartNum].hide();
+			
+			
 				score++;
-				// console.log("score"+score);
+		
+				
+				 console.log("score"+score);
 			}
 		}
 	function checkCollisionsTower(towerNum){
@@ -98,15 +102,7 @@
 
 		}
 	}
-	function newcollision(a , b ){
-	  if(a.x+50>=b.x-25&&(a.y+50>=b.y+25&&a.y-50<=b.y-25)  ){
-		  return true;
-	  }
-	  else{
-		  return false;
-	  }
 
-	}
 	function moveBamboo(){	
 		
 		// if(position <= tower[0].y+25){
