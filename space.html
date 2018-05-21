@@ -27,20 +27,11 @@
 		tKahang.generateAnimationCycles();
 		tKahang.renameCycles(new Array("up","down"));
 		tKahang.setAnimationSpeed(1000);
-		tKahang.pauseAnimation();
-		tKahang.setCurrentCycle("up");
-			
-		// kahang.loadAnimation(800,200,100,100);
-		// kahang.setSpeed(0);
-		// kahang.generateAnimationCycles();
-		// kahang.renameCycles(new Array("up","down"));
-		// kahang.setAnimationSpeed(1000);
-		// kahang.pauseAnimation();
-		// kahang.setCurrentCycle("up");
+		tKahang.playAnimation();
+		tKahang.setCurrentCycle("down");
 		
 		tKahang.checkKeys = function(){
 			this.changeImage("kahang2.png");
-			
 			if(keysDown[K_SPACE]){
 				kahang.playAnimation();
 				this.addVector(0,1);
@@ -58,6 +49,7 @@
 				this.addVector(180,0.5);
 			}
 			else{
+				
 				this.addVector(180,0.5);				
 			}
 
@@ -81,8 +73,8 @@
 
 			if(newcollision(kahang,heart[heartNum])){
 				heart[heartNum].hide();
-				score++;
-				// console.log("score"+score);
+				score +=1 ;
+				console.log("score: "+ score);
 			}
 		}
 	function checkCollisionsTower(towerNum){
@@ -100,6 +92,8 @@
 	}
 	function newcollision(a , b ){
 	  if(a.x+50>=b.x-25&&(a.y+50>=b.y+25&&a.y-50<=b.y-25)  ){
+		// heart[heartNum].hide();
+		//   score +=1;
 		  return true;
 	  }
 	  else{
@@ -120,6 +114,12 @@
 		// 	}
 		// }
 
+	}
+	function Level(){
+		if(score == 5){
+			moveBamboo();
+			
+		}
 	}
 
 	function init(){
@@ -179,7 +179,8 @@
 			heart[i].update();
 
 		}
-		moveBamboo();
+		// moveBamboo();
+		Level();
 		kahang.update();
 		// console.log("w"+kahang.cWidth)
 
