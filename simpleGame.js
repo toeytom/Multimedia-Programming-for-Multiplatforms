@@ -360,7 +360,39 @@ function Sprite(scene, imageFile, width, height){
 
     return collision;
   } // end collidesWith
-  
+  this.collidesWithnew = function(sprite){
+    //check for collision with another sprite
+    
+    //collisions only activated when both sprites are visible
+    collision = false;
+    if (this.visible){
+      if (sprite.visible){
+	//define borders
+	myLeft = this.x;
+	myRight = this.x + 50;
+	myTop = this.y;
+	myBottom = this.y + 50;
+	otherLeft = sprite.x;
+	otherRight = sprite.x + sprite.width;
+	otherTop = sprite.y;
+	otherBottom = sprite.y + sprite.height;
+    
+	//assume collision
+	collision = true;
+	
+	//determine non-colliding states
+	if ((myBottom < otherTop) ||
+	    (myTop > otherBottom) ||
+	    (myRight < otherLeft) ||
+	    (myLeft > otherRight)) {
+	      collision = false;
+	} // end if
+
+      } // end 'other visible' if
+    } // end 'I'm visible' if
+
+    return collision;
+  }
   this.distanceTo = function(sprite){
       //get centers of sprites
       myX = this.x + (this.width/2);
@@ -922,6 +954,7 @@ function Tile( mapX, mapY, x, y, type ){
 	  }
 	}
   }
+  
 }
 
 function TileMap(scene){
