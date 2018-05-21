@@ -14,6 +14,7 @@
 	var dist;
 	var distY;
 	var position;
+	var position2;
 
 
 	
@@ -94,13 +95,37 @@
 	function moveBamboo(){	
 		
 		if(position <= tower[0].y+25){
-			for(var i =0; i<8; i++){
-				tower[i].addVector(0,0.5);
-			}
-			
+			for(var i =0; i<8; i+2){
+				if(i==0||i==1||i==4||i==5){
+				tower[i].addVector(0,0.5);}
+				else{
+					tower[i].addVector(180,0.5);
+				}
+			}			
 		}if(position >= tower[0].y+25) {
-			for(var i =0; i<8; i++){
-				tower[i].addVector(180,0.5);
+			for(var i =0; i<8; i+2){
+				if(i==0||i==1||i==4||i==5){
+				tower[i].addVector(180,0.5);}
+				else{
+					tower[i].addVector(0,0.5);
+				}
+			}
+		}
+		if(position <= tower[2].y+25){
+			for(var i =1; i<8; i+2){
+				if(i==0||i==1||i==4||i==5){
+				tower[i].addVector(0,0.5);}
+				else{
+					tower[i].addVector(180,0.5);
+				}
+			}			
+		}if(position >= tower[2].y+25) {
+			for(var i =1; i<8; i+2){
+				if(i==0||i==1||i==4||i==5){
+				tower[i].addVector(180,0.5);}
+				else{
+					tower[i].addVector(0,0.5);
+				}
 			}
 		}
 
@@ -133,8 +158,9 @@
 				tower[i].setPosition(tower[i-1].x,tower[i-1].y+480);
 
 			}
+		
 		}
-
+		position2 = tower[2].y;
 		for(var i=0; i<4;i++){
 			heart[i] = new Heart();
 			heart[i].setSpeed(2);
@@ -142,8 +168,7 @@
 
 			heart[i].setPosition(tower[i*2].x,tower[i*2].y+220);
 			
-		}
-		
+		}		
 		
 		kahang.setPosition(125,heart[0].y+20);
 		scene.start();
@@ -164,8 +189,8 @@
 			heart[i].update();
 
 		}
-		// moveBamboo();
-		if(score >= 5){
+		
+		if(score >= 1){
 			moveBamboo();			
 		}
 		kahang.update();
