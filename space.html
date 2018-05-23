@@ -72,14 +72,28 @@
 
 	function checkCollisions(heartNum){
 
-			if(kahang.collidesWithnew(heart[heartNum])){
+			if(heart[heartNum].collidesWithnew(kahang,50,50)){
 				heart[heartNum].hide();
 				score +=1 ;
 				console.log("score: "+ score);
 			}
 		}
+	
+	
+		
+	
 	function checkCollisionsTower(towerNum){
-		// 
+		
+		var outsidebuttom = tower[towerNum].y+(tower[towerNum].height/2)<kahang.y-(50/2);
+		var outsidetop = tower[towerNum].y-(tower[towerNum].height/2)<kahang.y+(50/2);
+		var outsideleft = tower[towerNum].x-(tower[towerNum].width/2)<kahang.x+(50/2);
+		var outsideright = tower[towerNum].x+(tower[towerNum].width/2)<kahang.x-(50/2);
+		if(outsidebuttom || outsideleft||outsidetop||outsideright){
+			console.log("not collision")
+		}
+		else{
+			console.log("collision")
+		}
 			
 		
 	}

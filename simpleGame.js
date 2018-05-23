@@ -360,7 +360,8 @@ function Sprite(scene, imageFile, width, height){
 
     return collision;
   } // end collidesWith
-  this.collidesWithnew = function(sprite){
+  this.collidesWithnew = function(sprite,sizeRealWidth,sizeRealHeight){
+
     //check for collision with another sprite
     
     //collisions only activated when both sprites are visible
@@ -369,13 +370,13 @@ function Sprite(scene, imageFile, width, height){
       if (sprite.visible){
 	//define borders
 	myLeft = this.x;
-	myRight = this.x + 50;
+	myRight = this.x + this.width;
 	myTop = this.y;
-	myBottom = this.y + 50;
+	myBottom = this.y + this.height;
 	otherLeft = sprite.x;
-	otherRight = sprite.x + sprite.width;
+	otherRight = sprite.x + sizeRealWidth;
 	otherTop = sprite.y;
-	otherBottom = sprite.y + sprite.height;
+	otherBottom = sprite.y + sizeRealHeight;
     
 	//assume collision
 	collision = true;
@@ -393,6 +394,9 @@ function Sprite(scene, imageFile, width, height){
 
     return collision;
   }
+
+  
+
   this.distanceTo = function(sprite){
       //get centers of sprites
       myX = this.x + (this.width/2);
