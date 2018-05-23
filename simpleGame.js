@@ -374,9 +374,9 @@ function Sprite(scene, imageFile, width, height){
 	myTop = this.y;
 	myBottom = this.y + this.height;
 	otherLeft = sprite.x;
-	otherRight = sprite.x + sizeRealWidth;
+	otherRight = sprite.x + sizeRealWidth/2;
 	otherTop = sprite.y;
-	otherBottom = sprite.y + sizeRealHeight;
+	otherBottom = sprite.y + sizeRealHeight/2;
     
 	//assume collision
 	collision = true;

@@ -73,7 +73,7 @@
 
 	function checkCollisions(heartNum){
 
-			if(heart[heartNum].collidesWithnew(kahang,50,50)){
+			if(heart[heartNum].collidesWithnew(kahang,100,100)){
 				heart[heartNum].hide();
 				score +=1 ;
 				console.log("score: "+ score);
@@ -188,7 +188,7 @@
 			heart[i].update();
 
 		}
-		
+		console.log("dasdas"+tower[0].x)
 		if(score >= 2){
 			moveBamboo(0.5);			
 		}
