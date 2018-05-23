@@ -15,6 +15,7 @@
 	var distY;
 	var position;
 	var position2;
+	// var speed=0.5;
 
 
 	
@@ -106,22 +107,22 @@
 		}
 	}
 
-	function moveBamboo(){	
+	function moveBamboo(speed){	
 		
 		if(position <= tower[0].y+20){
 			for(var i =0; i<8; i++){
 				if(i==0||i==1||i==4||i==5){
-				tower[i].addVector(0,0.5);}
+				tower[i].addVector(0,speed);}
 				else{
-					tower[i].addVector(180,0.5);
+					tower[i].addVector(180,speed);
 				}
 			}			
 		}if(position >= tower[0].y+20) {
 			for(var i =0; i<8; i++){
 				if(i==0||i==1||i==4||i==5){
-				tower[i].addVector(180,0.5);}
+				tower[i].addVector(180,speed);}
 				else{
-					tower[i].addVector(0,0.5);
+					tower[i].addVector(0,speed);
 				}
 			}
 		}
@@ -188,8 +189,11 @@
 
 		}
 		
-		if(score >= 1){
-			moveBamboo();			
+		if(score >= 2){
+			moveBamboo(0.5);			
+		}
+		if(score >= 4){
+			moveBamboo(1);
 		}
 		kahang.update();
 		// console.log("w"+kahang.cWidth)
