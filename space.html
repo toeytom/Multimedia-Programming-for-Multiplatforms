@@ -33,6 +33,10 @@
 	var playagainBut
 	var butLeft
 	var butRight
+	var intro
+	var died 
+	var fly 
+	var laugh
 	// var speed=0.5;
 
 
@@ -63,7 +67,11 @@
 		but=new Sprite(scene,"images/1x/startBtn_1.png",150,50)
 		but.setSpeed(0);
 		but.setPosition(512,600)
-
+		intro = new Sound('sounds/intro.mp3')
+		intro.play()
+		died= new Sound('sounds/kahangDied.mp3')
+		fly= new Sound('sounds/kahangFly.mp3')
+		laugh = new Sound('sounds/kahangLaugh.mp3')
 		kahangStart = new kahangStartScene();
 		kahangStart.setPosition(500, 200);
 		logo =new Sprite(scene,"images/1x/nameStart.png",400,150)
@@ -93,6 +101,7 @@
 			if(playkahang){
 			this.changeImage("kahang2.png");
 			if((keysDown[K_SPACE]&&!die)||(butLeft.isMouseDown()&&!die)||(butRight.isMouseDown()&&!die)){
+				fly.play()
 				kahang.playAnimation();
 				this.addVector(0,1.5);
 				kahang.setCurrentCycle("up");
@@ -136,6 +145,7 @@
 
 			if(heart[heartNum].collidesWithnew(kahang,100,100)){
 				heart[heartNum].hide();
+				laugh.play()
 				score +=1 ;
 				labelscore.setLabel("ได้ "+score+" คะแนน")
 			}
@@ -152,8 +162,11 @@
 			var boundright = kahang.x+50>tower[towerNum].x-10
 		
 		if(boundbut&&boundleft&&boundright){
+			if(!die){
+			died.play()
+			}
 			die =true
-			// alert(score)
+			
 			diescore.show()
 		playagainBut.show()
 			for(var i=0; i<10;i++){
@@ -175,6 +188,9 @@
 			
 		if(boundbut&&boundleft&&boundright){
 			diescore.show()
+			if(!die){
+			died.play()
+			}
 		playagainBut.show()
 		die=true
 			 for(var i=0; i<10;i++){
@@ -329,14 +345,7 @@
 		startScene();
 	}
 	
-	function touch(){
-		if(butLeft.isMouseDown()){
-			alert("EZ")
-		}
-		if(butRight.isMouseDown()){
-			alert("EZ")
-		}
-	}
+
 	function update(){ 
 		scene.clear();
 		
