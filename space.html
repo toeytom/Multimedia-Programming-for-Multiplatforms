@@ -28,6 +28,9 @@
 	var playkahang =false
 	var tutorial 
 	var buttutorial
+	var die=false
+	var diescore
+	var playagainBut
 	// var speed=0.5;
 
 
@@ -87,7 +90,7 @@
 		tKahang.checkKeys = function(){
 			if(playkahang){
 			this.changeImage("kahang2.png");
-			if(keysDown[K_SPACE]){
+			if(keysDown[K_SPACE]&&!die){
 				kahang.playAnimation();
 				this.addVector(0,1.5);
 				kahang.setCurrentCycle("up");
@@ -147,8 +150,17 @@
 			var boundright = kahang.x+50>tower[towerNum].x-10
 		
 		if(boundbut&&boundleft&&boundright){
-			console.log("collisiontop")//+kahang.y-(50/2))+
+			die =true
 			// alert(score)
+			diescore.show()
+		playagainBut.show()
+			for(var i=0; i<10;i++){
+			tower[i].setSpeed(0);
+		}
+		for(var i=0; i<5;i++){
+			heart[i].setSpeed(0);
+		} 
+			
 		
 			
 		}
@@ -160,7 +172,16 @@
 			var boundright = kahang.x+50>tower[towerNum].x-10
 			
 		if(boundbut&&boundleft&&boundright){
-			console.log("collisibut")//+kahang.y-(50/2))+
+			diescore.show()
+		playagainBut.show()
+		die=true
+			 for(var i=0; i<10;i++){
+			tower[i].setSpeed(0);
+		}
+		for(var i=0; i<5;i++){
+			heart[i].setSpeed(0);
+		}
+			
 			//alert("=sdas")
 		}
 		
@@ -198,6 +219,15 @@
 		
 
 	}
+	function clickPlyagain(){
+		if(playagainBut.isMouseDown()){
+			 statusPlay = false
+			 playkahang =false
+			 die=false
+			 score=-1
+			 labelscore.HideBut()
+		}
+	}
 	function checkclickbut()
 	{
 		if(but.isMouseDown())
@@ -230,6 +260,14 @@
 		buttutorial= new Sprite(scene,"images/1x/close.png",50,50)
 		buttutorial.setSpeed(0)
 		buttutorial.setPosition(740,135)
+		diescore = new Sprite(scene,"images/1x/gameOverModal.png",550,450);
+		diescore.setSpeed(0)
+		diescore.setPosition(512,320)
+		playagainBut = new Sprite(scene,"images/1x/playAgainBtn.png",150,50)
+		playagainBut.setSpeed(0)
+		playagainBut.setPosition(512,425)
+		diescore.hide()
+		playagainBut.hide()
 		
 	
 	
@@ -314,7 +352,8 @@
 		tutorial.update()
 		buttutorial.update()
 		console.log("w"+kahang.cWidth)
-		
+		diescore.update()
+		playagainBut.update()
 		checkclickplay()
 		}
 		else{
@@ -322,6 +361,9 @@
 			kahangStart.update();
 			logo.update();
 			checkclickbut();
+		}
+		if(die){
+			clickPlyagain()
 		}
 	}
 	

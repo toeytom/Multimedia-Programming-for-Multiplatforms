@@ -918,10 +918,13 @@ function GameButton(label){
 	this.clicked = false;
     } // end onmouseup
     
+    
     this.isClicked = function(){
 	return this.button.clicked;
     } // end isClicked
-    
+    this.HideBut =function(){
+      this.button.style.visibility='hidden'
+    }
     this.setPos = function(left, top){
 	this.button.style.left = left + "px";
 	this.button.style.top = top + "px";
