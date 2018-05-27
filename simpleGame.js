@@ -904,6 +904,7 @@ function GameButton(label){
     this.button.style.left = "0px";
     this.button.style.top = "0px";
     this.button.style.color = "black";
+    this.button.style.fontSize  ="50px"
     
     this.button.onmousedown = function(){
 	this.clicked = true;
