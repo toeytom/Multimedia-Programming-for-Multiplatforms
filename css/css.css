@@ -28,4 +28,11 @@
     box-shadow: 0 5px;
     transform: translateY(4px);
 }
+@font-face {
+    font-family: fontnew;
+    src: url(2006iannnnnPDA.woff2);
+}
+body{
+    font-family: fontnew;
+}
 
