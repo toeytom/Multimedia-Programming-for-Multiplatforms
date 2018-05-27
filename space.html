@@ -31,6 +31,8 @@
 	var die=false
 	var diescore
 	var playagainBut
+	var butLeft
+	var butRight
 	// var speed=0.5;
 
 
@@ -90,7 +92,7 @@
 		tKahang.checkKeys = function(){
 			if(playkahang){
 			this.changeImage("kahang2.png");
-			if(keysDown[K_SPACE]&&!die){
+			if((keysDown[K_SPACE]&&!die)||(butLeft.isMouseDown()&&!die)||(butRight.isMouseDown()&&!die)){
 				kahang.playAnimation();
 				this.addVector(0,1.5);
 				kahang.setCurrentCycle("up");
@@ -268,6 +270,13 @@
 		playagainBut.setPosition(512,425)
 		diescore.hide()
 		playagainBut.hide()
+		butLeft = new Sprite(scene,"images/1x/btnFly.png",200,100)
+		butLeft.setSpeed(0)
+		butLeft.setPosition(150,550)
+		butRight = new Sprite(scene,"images/1x/btnFly.png",200,100)
+		butRight.setSpeed(0)
+		butRight.setPosition(874,550)
+
 		
 	
 	
@@ -320,7 +329,14 @@
 		startScene();
 	}
 	
-
+	function touch(){
+		if(butLeft.isMouseDown()){
+			alert("EZ")
+		}
+		if(butRight.isMouseDown()){
+			alert("EZ")
+		}
+	}
 	function update(){ 
 		scene.clear();
 		
@@ -348,6 +364,8 @@
 		if(score >= 20){
 			moveBamboo(1);
 		}
+		butLeft.update()
+		butRight.update()
 		kahang.update();
 		tutorial.update()
 		buttutorial.update()
@@ -355,6 +373,7 @@
 		diescore.update()
 		playagainBut.update()
 		checkclickplay()
+		
 		}
 		else{
 			but.update();
