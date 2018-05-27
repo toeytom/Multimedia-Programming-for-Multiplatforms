@@ -25,6 +25,9 @@
 	var logo 
 	var but
 	var labelscore
+	var playkahang =false
+	var tutorial 
+	var buttutorial
 	// var speed=0.5;
 
 
@@ -65,6 +68,7 @@
 	
 	}
 
+
 	//end
 	
 
@@ -81,6 +85,7 @@
 		tKahang.setCurrentCycle("down");
 		
 		tKahang.checkKeys = function(){
+			if(playkahang){
 			this.changeImage("kahang2.png");
 			if(keysDown[K_SPACE]){
 				kahang.playAnimation();
@@ -88,7 +93,9 @@
 				kahang.setCurrentCycle("up");
 			}
 		}
+		}
 		tKahang.checkGravity = function(){
+			if(playkahang){
 			if(this.y >540){
 				this.setPosition(this.x,540);
 
@@ -102,6 +109,7 @@
 				
 				this.addVector(180,0.5);				
 			}
+		}
 
 		}
 		return tKahang;
@@ -198,7 +206,15 @@
 			
 		}
 	}
-	
+	function checkclickplay(){
+		if(buttutorial.isMouseDown()){
+			tutorial.hide()
+			buttutorial.hide()
+
+			playkahang =true
+			playScene()
+		}
+	}
 	function scenePlay(){
 		statusPlay=true
 		console.log("kelasd")
@@ -207,15 +223,19 @@
 		background.setSpeed(0);
 		background.setPosition(512,320);
 		labelscore = new GameButton("คะแนน")
-		labelscore.setPosition(400,20)
-		
-		
+		labelscore.setPosition(420,20)
+		tutorial =new Sprite(scene,"images/1x/manualModal.png",550,450);
+		tutorial.setSpeed(0)
+		tutorial.setPosition(512,320)
+		buttutorial= new Sprite(scene,"images/1x/close.png",50,50)
+		buttutorial.setSpeed(0)
+		buttutorial.setPosition(740,135)
 		
 	
 	
 		for(var i=0; i<10;i++){
 			tower[i] = new Tower(); 
-			tower[i].setSpeed(2);
+			tower[i].setSpeed(0);
 			tower[i].changeMoveAngleBy(180);
 
 			if(i==0){
@@ -234,7 +254,7 @@
 		position2 = tower[2].y;
 		for(var i=0; i<5;i++){
 			heart[i] = new Heart();
-			heart[i].setSpeed(2);
+			heart[i].setSpeed(0);
 			heart[i].changeMoveAngleBy(180);
 
 			heart[i].setPosition(tower[i*2].x,tower[i*2].y+250);
@@ -243,6 +263,16 @@
 		kahang = new Kahang();
 		kahang.setPosition(tower[0].x,tower[0].y+250)
 		// kahang.setPosition(125,heart[0].y+50);
+
+	}
+	function playScene(){
+		
+		for(var i=0; i<10;i++){
+			tower[i].setSpeed(2);
+		}
+		for(var i=0; i<5;i++){
+			heart[i].setSpeed(2);
+		}
 
 	}
 	
@@ -281,8 +311,11 @@
 			moveBamboo(1);
 		}
 		kahang.update();
+		tutorial.update()
+		buttutorial.update()
 		console.log("w"+kahang.cWidth)
-		labelscore.update()
+		
+		checkclickplay()
 		}
 		else{
 			but.update();
