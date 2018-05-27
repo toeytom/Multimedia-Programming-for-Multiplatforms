@@ -3,11 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>กระหังหรรษา</title>
+	<link rel="stylesheet" href="css/css.css">
 	<script type="text/javascript" src="simpleGame.js"></script>
 	<script type="text/javascript"> 
 	var scene;
 	var background; //bg
 	var kahang; // kahang
+	var kahangStart; // kahangStart
 	var tower=[]; //bamboo
 	var heart=[];
 	var score = -1;
@@ -18,6 +20,37 @@
 	// var speed=0.5;
 
 
+
+
+	//starScene
+
+	function kahangStartScene(){
+		var tKahang = new Sprite(scene,"images/1x/kahangSprites.png",3200,800);
+		tKahang.loadAnimation(1600,400,400,399.9);
+		tKahang.setSpeed(0);
+		tKahang.generateAnimationCycles();
+		tKahang.renameCycles(new Array("up","down"));
+		tKahang.setAnimationSpeed(1500);
+		tKahang.playAnimation();
+		tKahang.setCurrentCycle("up");
+	
+
+		return tKahang;
+	}
+
+	function startScene(){
+		scene = new Scene();
+		scene.setSize(1024, 650);
+		background = new Sprite(scene, "images/1x/bgStart.png", 1024, 650);
+		background.setSpeed(0);
+		background.setPosition(512, 325);
+		kahangStart = new kahangStartScene();
+		kahangStart.setPosition(500, 200);
+		scene.start();
+	
+	}
+
+	//end
 	
 
 
@@ -143,8 +176,7 @@
 
 	}
 	
-
-	function init(){
+	function scenePlay(){
 		scene = new Scene();
 		scene.setSize(1024,650);
 		background = new Sprite(scene,"background3.jpg",1024,650);
@@ -188,35 +220,47 @@
 	}
 	
 
-	function update(){
-		scene.clear();
-		kahang.checkKeys();
-		background.update();
-		kahang.checkGravity();
-		for(var i=0; i<10;i++){
-			checkCollisionsTower(i);
-			tower[i].update();
-		}
-		for(var i=0; i<5;i++){
-			checkCollisions(i);
-			showHeart(i);
-			heart[i].update();
+	function init(){
+		// scenePlay();
+		startScene();
+	}
+	
 
-		}
-		console.log("dasdas"+tower[0].x)
-		if(score >= 10&&score<20){
-			moveBamboo(0.5);			
-		}
-		if(score >= 20){
-			moveBamboo(1);
-		}
-		kahang.update();
+	function update(){ 
+		scene.clear();
+		// kahang.checkKeys();
+		background.update();
+		kahangStart.update();
+		// kahang.checkGravity();
+		// for(var i=0; i<10;i++){
+		// 	checkCollisionsTower(i);
+		// 	tower[i].update();
+		// }
+		// for(var i=0; i<5;i++){
+		// 	checkCollisions(i);
+		// 	showHeart(i);
+		// 	heart[i].update();
+
+		// }
+		// console.log("dasdas"+tower[0].x)
+		// if(score >= 10&&score<20){
+		// 	moveBamboo(0.5);			
+		// }
+		// if(score >= 20){
+		// 	moveBamboo(1);
+		// }
+		// kahang.update();
 		// console.log("w"+kahang.cWidth)
 
 	}
 	</script>
 </head>
 <body onload = "init()">
+	<div>
+		<img  id="nameStart" src="images/1x/nameStart.png" alt="nameStart">
+	</div>
 
+	<div>
+		<input id="startBtn" type="image" src="images/1x/startBtn_1.png" alt="startBtn" ></input>
 </body>
 </html>
