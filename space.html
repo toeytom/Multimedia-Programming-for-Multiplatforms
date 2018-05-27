@@ -198,25 +198,7 @@
 			
 		}
 	}
-	function randombamboo(bamnum){
-		if(tower[bamnum].x<=1){
-			if(bamnum==0){
-				tower[bamnum].setPosition(tower[8].x+200,Math.random()*50+40);
-				tower[bamnum+1].setPosition(tower[bamnum].x,tower[bamnum].y+520);
-				heart[0].setPosition(tower[bamnum].x,tower[bamnum].y+250);
-				heart[0].show();
-			}
-			else {
-				tower[bamnum].setPosition(tower[bamnum-2].x+200,Math.random()*50+40);
-				tower[bamnum+1].setPosition(tower[bamnum].x,tower[bamnum].y+520);
-				heart[bamnum/2].setPosition(tower[bamnum].x,tower[bamnum].y+250);
-				heart[bamnum/2].show();
-			}
-				
-
-		}
-
-	}
+	
 	function scenePlay(){
 		statusPlay=true
 		console.log("kelasd")
@@ -280,9 +262,7 @@
 		if(statusPlay){
 		kahang.checkKeys();
 		kahang.checkGravity();
-		for (var i = 0;i<10 ;i=i+2){
-			randombamboo(i)
-		}
+	
 		for(var i=0; i<10;i++){
 			checkCollisionsTower(i);
 			tower[i].update();
