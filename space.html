@@ -10,7 +10,7 @@
 	var kahang; // kahang
 	var tower=[]; //bamboo
 	var heart=[];
-	var score = 0;
+	var score = -1;
 	var dist;
 	var distY;
 	var position;
@@ -36,7 +36,7 @@
 			this.changeImage("kahang2.png");
 			if(keysDown[K_SPACE]){
 				kahang.playAnimation();
-				this.addVector(0,1);
+				this.addVector(0,1.5);
 				kahang.setCurrentCycle("up");
 			}
 		}
@@ -84,18 +84,31 @@
 		
 	
 	function checkCollisionsTower(towerNum){
+		if(towerNum%2==0){
+
+			var boundbut = kahang.y-50<tower[towerNum].y+175
+			var boundleft = kahang.x-50<tower[towerNum].x+10
+			var boundright = kahang.x+50>tower[towerNum].x-10
 		
-		var outsidebuttom = tower[towerNum].y+(tower[towerNum].height/2)<kahang.y-(50/2);
-		var outsidetop = tower[towerNum].y-(tower[towerNum].height/2)<kahang.y+(50/2);
-		var outsideleft = tower[towerNum].x-(tower[towerNum].width/2)<kahang.x+(50/2);
-		var outsideright = tower[towerNum].x+(tower[towerNum].width/2)<kahang.x-(50/2);
-		if(outsidebuttom || outsideleft||outsidetop||outsideright){
-			console.log("not collision")
+		if(boundbut&&boundleft&&boundright){
+			console.log("collisiontop")//+kahang.y-(50/2))+
+			alert("=sdas")
+		
+			
+		}
+	
 		}
 		else{
-			console.log("collision")
-		}
+			var boundbut = kahang.y+50>tower[towerNum].y-175
+			var boundleft = kahang.x-50<tower[towerNum].x+10
+			var boundright = kahang.x+50>tower[towerNum].x-10
 			
+		if(boundbut&&boundleft&&boundright){
+			console.log("collisibut")//+kahang.y-(50/2))+
+			alert("=sdas")
+		}
+		
+		}
 		
 	}
 
@@ -110,7 +123,7 @@
 	function moveBamboo(speed){	
 		
 		if(position <= tower[0].y+20){
-			for(var i =0; i<8; i++){
+			for(var i =0; i<10; i++){
 				if(i==0||i==1||i==4||i==5){
 				tower[i].addVector(0,speed);}
 				else{
@@ -118,7 +131,7 @@
 				}
 			}			
 		}if(position >= tower[0].y+20) {
-			for(var i =0; i<8; i++){
+			for(var i =0; i<10; i++){
 				if(i==0||i==1||i==4||i==5){
 				tower[i].addVector(180,speed);}
 				else{
@@ -133,66 +146,68 @@
 
 	function init(){
 		scene = new Scene();
-		// scene.setSize(800,600);
-		background = new Sprite(scene,"background3.jpg",800,600);
+		scene.setSize(1024,650);
+		background = new Sprite(scene,"background3.jpg",1024,650);
 		background.setSpeed(0);
-		background.setPosition(400,300);
-		kahang = new Kahang();
+		background.setPosition(512,320);
+	
 
 		
 
-		for(var i=0; i<8;i++){
+		for(var i=0; i<10;i++){
 			tower[i] = new Tower(); 
 			tower[i].setSpeed(2);
 			tower[i].changeMoveAngleBy(180);
 
 			if(i==0){
-				tower[i].setPosition(200,Math.random()*50+50);
+				tower[i].setPosition(200,Math.random()*50+40);
 				position = tower[i].y;
 			}
 			else if(i%2==0){
-				tower[i].setPosition(tower[i-2].x+200,Math.random()*50+50);
+				tower[i].setPosition(tower[i-2].x+200,Math.random()*50+40);
 			}else{
 				tower[i].changeImage("bottom.png");
-				tower[i].setPosition(tower[i-1].x,tower[i-1].y+460);
+				tower[i].setPosition(tower[i-1].x,tower[i-1].y+520);
 
 			}
 		
 		}
 		position2 = tower[2].y;
-		for(var i=0; i<4;i++){
+		for(var i=0; i<5;i++){
 			heart[i] = new Heart();
 			heart[i].setSpeed(2);
 			heart[i].changeMoveAngleBy(180);
 
-			heart[i].setPosition(tower[i*2].x,tower[i*2].y+220);
+			heart[i].setPosition(tower[i*2].x,tower[i*2].y+250);
 			
 		}		
-		
-		kahang.setPosition(125,heart[0].y+20);
+		kahang = new Kahang();
+		kahang.setPosition(tower[0].x,tower[0].y+250)
+		// kahang.setPosition(125,heart[0].y+50);
 		scene.start();
 	}
+	
 
 	function update(){
 		scene.clear();
 		kahang.checkKeys();
 		background.update();
 		kahang.checkGravity();
-		for(var i=0; i<8;i++){
+		for(var i=0; i<10;i++){
 			checkCollisionsTower(i);
 			tower[i].update();
 		}
-		for(var i=0; i<4;i++){
+		for(var i=0; i<5;i++){
 			checkCollisions(i);
 			showHeart(i);
 			heart[i].update();
 
 		}
 		console.log("dasdas"+tower[0].x)
-		if(score >= 2){
+		if(score >= 10&&score<20){
 			moveBamboo(0.5);			
 		}
-		if(score >= 4){
+		if(score >= 20){
 			moveBamboo(1);
 		}
 		kahang.update();
