@@ -898,10 +898,12 @@ function GameButton(label){
     this.clicked = false;
     this.button = document.createElement("button");
     this.button.setAttribute("type", "button");
+    this.button.setAttribute("class", "btn btn-warning");
     this.button.innerHTML = label;
     this.button.style.position = "absolute";
     this.button.style.left = "0px";
     this.button.style.top = "0px";
+    this.button.style.color = "black";
     
     this.button.onmousedown = function(){
 	this.clicked = true;
@@ -923,7 +925,10 @@ function GameButton(label){
 	this.button.style.left = left + "px";
 	this.button.style.top = top + "px";
     } // end setPos
-    
+    this.setLabel = function(text)
+    {
+      this.button.innerHTML=text
+    }
     this.setPosition = function(left, top){
 	//utility alias for setPos
 	this.setPos(left, top);
@@ -935,6 +940,55 @@ function GameButton(label){
     } // end setSize
     
     document.body.appendChild(this.button);            
+} // end gameButton class def
+function Gamelabel(label){
+  /*
+This object creates a button that can be sized
+and positioned wherever you wish. The label will
+be displayed, but can be complete HTML (including
+an image tag if you wish.)  Use isClicked() to
+get the current status of the button (true or false.)
+Responds to touch events on mobile devices.
+  */
+  
+  this.clicked = false;
+  this.div = document.createElement("div");
+  this.div.innerHTML = label;
+  this.div.style.left = "0px";
+  this.div.style.top = "0px";
+  
+  this.div.onmousedown = function(){
+this.clicked = true;
+  } // end mousedown
+  
+  this.div.ontouchstart = function(){
+this.clicked = true;
+  } // end touchstart
+  
+  this.div.onmouseup = function(){
+this.clicked = false;
+  } // end onmouseup
+  
+  this.isClicked = function(){
+return this.div.clicked;
+  } // end isClicked
+  
+  this.setPos = function(left, top){
+this.div.style.left = left + "px";
+this.div.style.top = top + "px";
+  } // end setPos
+  
+  this.setPosition = function(left, top){
+//utility alias for setPos
+this.setPos(left, top);
+  }
+  
+  this.setSize = function(width, height){
+this.div.style.width = width + "px";
+this.div.style.height = height + "px";
+  } // end setSize
+  
+  document.body.appendChild(this.div);            
 } // end gameButton class def
 
 function Animation(spriteSheet, imgWidth, imgHeight, cellWidth, cellHeight){
