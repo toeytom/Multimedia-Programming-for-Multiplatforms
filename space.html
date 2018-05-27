@@ -3,11 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>กระหังหรรษา</title>
+	<link rel="stylesheet" href="css/css.css">
 	<script type="text/javascript" src="simpleGame.js"></script>
 	<script type="text/javascript"> 
 	var scene;
 	var background; //bg
 	var kahang; // kahang
+	var kahangStart; // kahangStart
 	var tower=[]; //bamboo
 	var heart=[];
 	var score = -1;
@@ -15,9 +17,50 @@
 	var distY;
 	var position;
 	var position2;
+	var statusPlay = false
+	var logo 
+	var but
 	// var speed=0.5;
 
 
+
+
+	//starScene
+
+	function kahangStartScene(){
+		var tKahang = new Sprite(scene,"images/1x/kahangSprites.png",3200,800);
+		tKahang.loadAnimation(1600,400,400,399.9);
+		tKahang.setSpeed(0);
+		tKahang.generateAnimationCycles();
+		tKahang.renameCycles(new Array("up","down"));
+		tKahang.setAnimationSpeed(1500);
+		tKahang.playAnimation();
+		tKahang.setCurrentCycle("up");
+	
+
+		return tKahang;
+	}
+
+	function startScene(){
+		scene = new Scene();
+		scene.setSize(1024, 650);
+		background = new Sprite(scene, "images/1x/bgStart.png", 1024, 650);
+		background.setSpeed(0);
+		background.setPosition(512, 325);
+		but=new Sprite(scene,"images/1x/startBtn_1.png",150,50)
+		but.setSpeed(0);
+		but.setPosition(512,600)
+
+		kahangStart = new kahangStartScene();
+		kahangStart.setPosition(500, 200);
+		logo =new Sprite(scene,"images/1x/nameStart.png",400,150)
+		logo.setSpeed(0);
+		logo.setPosition(512,420)
+		scene.start();
+	
+	}
+
+	//end
 	
 
 
@@ -92,7 +135,7 @@
 		
 		if(boundbut&&boundleft&&boundright){
 			console.log("collisiontop")//+kahang.y-(50/2))+
-			alert("=sdas")
+			alert(score)
 		
 			
 		}
@@ -142,12 +185,20 @@
 		
 
 	}
+	function checkclickbut()
+	{
+		if(but.isMouseDown())
+		{
+			scenePlay()
+			
+		}
+	}
 	
-
-	function init(){
-		scene = new Scene();
+	function scenePlay(){
+		statusPlay=true
+		console.log("kelasd")
 		scene.setSize(1024,650);
-		background = new Sprite(scene,"background3.jpg",1024,650);
+		background.changeImage("background3.jpg")
 		background.setSpeed(0);
 		background.setPosition(512,320);
 
@@ -185,14 +236,24 @@
 		kahang = new Kahang();
 		kahang.setPosition(tower[0].x,tower[0].y+250)
 		// kahang.setPosition(125,heart[0].y+50);
-		scene.start();
+
 	}
 	
 
-	function update(){
+	function init(){
+		// scenePlay();
+		startScene();
+	}
+	
+
+	function update(){ 
 		scene.clear();
-		kahang.checkKeys();
+		
 		background.update();
+		
+		
+		if(statusPlay){
+		kahang.checkKeys();
 		kahang.checkGravity();
 		for(var i=0; i<10;i++){
 			checkCollisionsTower(i);
@@ -212,13 +273,22 @@
 			moveBamboo(1);
 		}
 		kahang.update();
-		// console.log("w"+kahang.cWidth)
-
+		console.log("w"+kahang.cWidth)
+		}
+		else{
+			but.update();
+			kahangStart.update();
+			logo.update();
+			checkclickbut();
+		}
 	}
 	
 	</script>
 </head>
 <body onload = "init()">
 
+
+	<!-- <div>
+		<input id="startBtn" type="image" src="images/1x/startBtn_1.png" alt="startBtn" onclick="scenePlay()" ></input> -->
 </body>
 </html>
