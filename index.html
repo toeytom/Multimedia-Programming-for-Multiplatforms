@@ -100,7 +100,7 @@
 		tKahang.checkKeys = function(){
 			if(playkahang){
 			this.changeImage("kahang2.png");
-			if((keysDown[K_SPACE]&&!die)||(butLeft.isMouseDown()&&!die)||(butRight.isMouseDown()&&!die)){
+			if((keysDown[K_SPACE]&&!die)||(butLeft.isClicked()&&!die)||(butRight.isClicked()&&!die)){
 				fly.play()
 				kahang.playAnimation();
 				this.addVector(0,1.5);
@@ -238,7 +238,7 @@
 
 	}
 	function clickPlyagain(){
-		if(playagainBut.isMouseDown()){
+		if(playagainBut.isClicked()){
 			 statusPlay = false
 			 playkahang =false
 			 die=false
@@ -248,14 +248,14 @@
 	}
 	function checkclickbut()
 	{
-		if(but.isMouseDown())
+		if(but.isClicked())
 		{
 			scenePlay()
 			
 		}
 	}
 	function checkclickplay(){
-		if(buttutorial.isMouseDown()){
+		if(buttutorial.isClicked()){
 			tutorial.hide()
 			buttutorial.hide()
 
@@ -265,7 +265,7 @@
 	}
 	function scenePlay(){
 		statusPlay=true
-		console.log("kelasd")
+		
 		scene.setSize(1024,650);
 		background.changeImage("background3.jpg")
 		background.setSpeed(0);
@@ -286,12 +286,7 @@
 		playagainBut.setPosition(512,425)
 		diescore.hide()
 		playagainBut.hide()
-		butLeft = new Sprite(scene,"images/1x/btnFly.png",200,100)
-		butLeft.setSpeed(0)
-		butLeft.setPosition(150,550)
-		butRight = new Sprite(scene,"images/1x/btnFly.png",200,100)
-		butRight.setSpeed(0)
-		butRight.setPosition(874,550)
+
 
 		
 	
@@ -325,6 +320,12 @@
 		}		
 		kahang = new Kahang();
 		kahang.setPosition(tower[0].x,tower[0].y+250)
+		butLeft = new Sprite(scene,"images/1x/btnFly.png",200,100)
+		butLeft.setSpeed(0)
+		butLeft.setPosition(150,550)
+		butRight = new Sprite(scene,"images/1x/btnFly.png",200,100)
+		butRight.setSpeed(0)
+		butRight.setPosition(874,550)
 		// kahang.setPosition(125,heart[0].y+50);
 
 	}
@@ -373,9 +374,10 @@
 		if(score >= 20){
 			moveBamboo(1);
 		}
+		
+		kahang.update();
 		butLeft.update()
 		butRight.update()
-		kahang.update();
 		tutorial.update()
 		buttutorial.update()
 		console.log("w"+kahang.cWidth)
