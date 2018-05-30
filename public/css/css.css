@@ -1,0 +1,44 @@
+#startbutton{
+    
+    width: 150px;
+    height: 50px;
+    left:512 ;
+    top: 600;
+}
+
+
+
+
+#nameStart{
+    width: 400px;
+    height: 150px;
+    z-index: 2;
+    position: absolute;
+    left: 320px;
+    right: 550px;
+    margin-top: 350px;
+
+}
+
+
+#startBtn{
+    width: 150px;
+    height: 50px; 
+    z-index: 2; 
+    position: absolute; 
+    left: 450px; 
+    top: 550px;
+    outline: none;
+}
+#startBtn:active{
+    box-shadow: 0 5px;
+    transform: translateY(4px);
+}
+@font-face {
+    font-family: fontnew;
+    src: url(2006iannnnnPDA.woff2);
+}
+body{
+    font-family: fontnew;
+}
+
